@@ -1,0 +1,1 @@
+use react toastify for using toast notifcation later on the application for any data  mauplation action by the user. 

@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { getMembers, getMeetings, getEvents, getRequests } from "@/lib/api"
@@ -5,35 +6,50 @@ import { Calendar, UserCheck, UserMinus, Clock, Users, AlertTriangle } from "luc
 import Link from "next/link"
 import AdminDashboardClient from "@/components/ui/dashboard/admin/admin-dashboard-client"
 
+type Member = {
+  id: string
+  first_name: string
+  last_name: string
+  membershipExpiryDate: string
+}
+
+type Meeting = {
+  id: string
+  title: string
+  date: string
+}
+
+type Event = {
+  id: string
+  date: string
+  title ?: string 
+}
+
+type Request = {
+  id: string
+  status: string
+}
 
 export default async function AdminDashboard() {
-  // Fetch data server-side
   const [membersData, meetingsData, eventsData, requestsData] = await Promise.all([
-    getMembers("1"),
-    getMeetings("1"),
-    getEvents("1"),
-    getRequests("1"),
+    getMembers("1") as Promise<Member[]>,
+    getMeetings("1") as Promise<Meeting[]>,
+    getEvents("1") as Promise<Event[]>,
+    getRequests("1") as Promise<Request[]>,
   ])
 
-  // Calculate stats on the server
   const now = new Date()
   const nextMonth = new Date()
-  nextMonth.setMonth(nextMonth.getMonth() + 1)  
+  nextMonth.setMonth(nextMonth.getMonth() + 1)
 
   const expiringMembers = membersData.filter((member) => {
     const expiryDate = new Date(member.membershipExpiryDate)
     return expiryDate > now && expiryDate < nextMonth
   })
 
-  const upcomingMeetings = meetingsData.filter((meeting) => {
-    const meetingDate = new Date(meeting.date)
-    return meetingDate > now
-  })
+  const upcomingMeetings = meetingsData.filter((meeting) => new Date(meeting.date) > now)
 
-  const upcomingEvents = eventsData.filter((event) => {
-    const eventDate = new Date(event.date)
-    return eventDate > now
-  })
+  const upcomingEvents = eventsData.filter((event) => new Date(event.date) > now)
 
   const pendingRequests = requestsData.filter((request) => request.status === "Pending")
 
@@ -134,9 +150,7 @@ export default async function AdminDashboard() {
         </Alert>
       )}
 
-      {/* Client component only for interactive lists/tabs */}
       <AdminDashboardClient members={membersData} meetings={meetingsData} events={eventsData} stats={stats} />
     </div>
   )
 }
-
