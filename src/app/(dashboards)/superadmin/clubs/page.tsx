@@ -21,16 +21,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { Building, CalendarClock, MapPin, MoreHorizontal, Plus, Users } from "lucide-react"
 import Link from "next/link"
 
+type Club = any
+
 export default function ClubsPage() {
-  const [clubs, setClubs] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [selectedClub, setSelectedClub] = useState(null)
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
-  const { toast } = useToast()
+  const [clubs, setClubs] = useState<Club[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState<boolean>(false)
+//   const { toast } = useToast()
 
   useEffect(() => {
     const fetchClubs = async () => {
@@ -47,13 +49,13 @@ export default function ClubsPage() {
     fetchClubs()
   }, [])
 
-  const handleViewClub = (club) => {
+  const handleViewClub = (club: Club) => {
     setSelectedClub(club)
     setIsViewDialogOpen(true)
   }
 
   return (
-     <>
+    <>
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -97,7 +99,7 @@ export default function ClubsPage() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  clubs.map((club) => (
+                  clubs.map((club: Club) => (
                     <TableRow key={club.id}>
                       <TableCell className="font-medium">{club.name}</TableCell>
                       <TableCell>{club.city}</TableCell>
@@ -211,7 +213,7 @@ export default function ClubsPage() {
                 <h3 className="text-sm font-medium text-muted-foreground mb-2">Location</h3>
                 <div className="rounded-md border overflow-hidden aspect-video">
                   <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59365.55110417767!2d77.40113913124998!3d23.233433599999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c428f8fd68fbd%3A0x2155716d572d4f8!2sBhopal%2C%20Madhya%20Pradesh%2C%20India!5e0!3m2!1sen!2sin!4v1690356415188!5m2!1sen!2sin`}
+                    src={`https://www.google.com/maps/embed?...`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -236,7 +238,6 @@ export default function ClubsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    /</>
+    </>
   )
 }
-
