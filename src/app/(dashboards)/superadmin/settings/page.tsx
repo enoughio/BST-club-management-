@@ -7,8 +7,8 @@ import { Card } from "@/components/ui/card"
 // import { useToast } from "@/hooks/use-toast"
 
 type GeneralSettings = { organizationName: string; supportEmail: string; contactPhone: string; websiteUrl: string; maxClubsPerAdmin: string; maxMembersPerClub: string }
-type NotificationSettings = { emailNotifications: boolean; membershipReminders: boolean; eventReminders: boolean; requestNotifications: boolean; adminActivityAlerts: boolean }
-type SecuritySettings = { twoFactorAuth: boolean; passwordExpiryDays: string; sessionTimeoutMinutes: string; allowMultipleLogins: boolean }
+// type NotificationSettings = { emailNotifications: boolean; membershipReminders: boolean; eventReminders: boolean; requestNotifications: boolean; adminActivityAlerts: boolean }
+// type SecuritySettings = { twoFactorAuth: boolean; passwordExpiryDays: string; sessionTimeoutMinutes: string; allowMultipleLogins: boolean }
 
 export default function SettingsPage() {
 //   const { toast } = useToast()
@@ -16,16 +16,20 @@ export default function SettingsPage() {
 
   const [generalSettings, setGeneralSettings] = useState<GeneralSettings>({ organizationName: "Bharat Storytellers", supportEmail: "contact@bharatstorytellers.com", contactPhone: "+1-234-567-8900", websiteUrl: "https://bharatstorytellers.com/", maxClubsPerAdmin: "3", maxMembersPerClub: "100" })
 
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({ emailNotifications: true, membershipReminders: true, eventReminders: true, requestNotifications: true, adminActivityAlerts: true })
+//   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({ emailNotifications: true, membershipReminders: true, eventReminders: true, requestNotifications: true, adminActivityAlerts: true })
 
-  const [securitySettings, setSecuritySettings] = useState<SecuritySettings>({ twoFactorAuth: false, passwordExpiryDays: "90", sessionTimeoutMinutes: "30", allowMultipleLogins: true })
+//   const [securitySettings, setSecuritySettings] = useState<SecuritySettings>({ twoFactorAuth: false, passwordExpiryDays: "90", sessionTimeoutMinutes: "30", allowMultipleLogins: true })
 
   const handleGeneralSettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => { const { name, value } = e.target; setGeneralSettings((p) => ({ ...p, [name]: value } as any)) }
-  const handleNotificationToggle = (name: keyof NotificationSettings, checked: boolean) => setNotificationSettings((p) => ({ ...p, [name]: checked }))
-  const handleSecuritySettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => { const { name, value } = e.target; setSecuritySettings((p) => ({ ...p, [name]: value } as any)) }
-  const handleSecurityToggle = (name: keyof SecuritySettings, checked: boolean) => setSecuritySettings((p) => ({ ...p, [name]: checked }))
+//   const handleNotificationToggle = (name: keyof NotificationSettings, checked: boolean) => setNotificationSettings((p) => ({ ...p, [name]: checked }))
+//   const handleSecuritySettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => { const { name, value } = e.target; setSecuritySettings((p) => ({ ...p, [name]: value } as any)) }
+//   const handleSecurityToggle = (name: keyof SecuritySettings, checked: boolean) => setSecuritySettings((p) => ({ ...p, [name]: checked }))
 
-// //   const handleSaveSettings = async () => { setIsSaving(true); try { toast({ title: "Saved", description: "Settings saved." }) } catch (err) { toast({ title: "Error", description: "Failed to save.", variant: "destructive" }) } finally { setIsSaving(false) } }
+  const handleSaveSettings = async () => { setIsSaving(true); try { 
+    // toast({ title: "Saved", description: "Settings saved." }) 
+     } catch (err) {
+    //  toast({ title: "Error", description: "Failed to save.", variant: "destructive" })
+     } finally { setIsSaving(false) } }
 
   return (
     <div className="flex flex-col gap-6">

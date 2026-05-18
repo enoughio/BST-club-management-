@@ -84,8 +84,7 @@ export default function AddEventPage() {
 
   const handleSlugGeneration = () => {
     if (formData.title) {
-      const slug = formData.title.toLowerCase().replace(/[^
-\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
+      const slug = formData.title.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-")
       setFormData((prev) => ({ ...prev, slug }))
     }
   }

@@ -50,7 +50,7 @@ export default function ClubDetailPage() {
     }
 
     fetchData()
-//   }, [params.id, toast])
+  }, [params.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target

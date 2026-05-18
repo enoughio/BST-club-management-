@@ -2,6 +2,8 @@ import React from 'react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 
+import { logout }  from "../actions"
+
 export const metadata = {
 	title: 'Dashboards',
 	description: 'Common dashboard layout',
@@ -51,7 +53,7 @@ export default async function DashboardLayout({ children }) {
 	return (
 		<html lang="en">
 			<head />
-			<body style={styles.body}>
+			<div style={styles.body}>
 				<div style={styles.container}>
 					<aside style={styles.sidebar}>
 						{/* Brand */}
@@ -86,9 +88,13 @@ export default async function DashboardLayout({ children }) {
 
 						{/* Logout Button */}
 						<div style={styles.logoutSection}>
-							<Link href="/login" style={styles.logoutButton}>
-								<span>🚪</span> Sign Out
-							</Link>
+							<div  style={styles.logoutButton}>
+								<form action={logout} >
+									<button type='submit' >
+                                    Logout
+									</button> 
+								</form>
+							</div>
 						</div>
 					</aside>
 
@@ -102,7 +108,7 @@ export default async function DashboardLayout({ children }) {
 						<footer style={styles.footer}>© {new Date().getFullYear()} Portal</footer>
 					</main>
 				</div>
-			</body>
+			</div>
 		</html>
 	)
 }
