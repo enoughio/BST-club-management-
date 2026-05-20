@@ -1,5 +1,6 @@
 import React from 'react'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 import { logout }  from "../actions"
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default async function DashboardLayout({ children }) {
 	const cookieStore = await cookies()
-	const role = cookieStore.get('x-bst-user-role')?.value || 'guest'
+	const role = cookieStore.get('x-bst-user-role')?.value
 
 	const navByRole = {
 		admin: [
@@ -41,18 +42,24 @@ export default async function DashboardLayout({ children }) {
 			{ label: 'Requests', href: '/superadmin/requests', icon: '🔔' },
 			{ label: 'Settings', href: '/superadmin/settings', icon: '⚙️' },
 		],
-		guest: [
-			{ label: 'Overview', href: '/', icon: '🏠' },
-			{ label: 'Find a Club', href: '/findaclub', icon: '🔍' },
-		],
+
 	}
 
-	const navItems = navByRole[role] || navByRole.guest
-	const roleTitle = role.charAt(0).toUpperCase() + role.slice(1)
+	// if role is not set, redirect to login
+	// if (!role) {
+	// 	redirect('/login')
+	// }
+
+	const navItems = navByRole[role] ?? []
+	let roleTitle = "User"
+	if (role === 'admin') roleTitle = "Club Admin"
+	else if (role === 'member') roleTitle = "Member"
+	else if (role === 'superadmin') roleTitle = "Super Admin"
+
 
 	return (
-		<html lang="en">
-			<head />
+		<div lang="en">
+			{/* <head /> */}
 			<div style={styles.body}>
 				<div style={styles.container}>
 					<aside style={styles.sidebar}>
@@ -109,7 +116,7 @@ export default async function DashboardLayout({ children }) {
 					</main>
 				</div>
 			</div>
-		</html>
+		</div >
 	)
 }
 

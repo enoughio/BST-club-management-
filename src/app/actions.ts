@@ -6,8 +6,6 @@ import { cookies } from "next/headers";
 
 export async function logout(request: NextRequest) {
     
-
-
     console.log("action logout called ")
 
     const cookiestore  = await cookies(); 
