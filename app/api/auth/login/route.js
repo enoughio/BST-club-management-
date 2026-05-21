@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -24,7 +25,7 @@ export async function POST(request) {
         membershipExpiryDate: "2023-05-15",
         joinDate: "2022-05-15",
         bio: "Passionate about public speaking and leadership development. I joined Storytellers to improve my communication skills and connect with like-minded individuals.",
-        role: "superadmin",
+        role: "admin",
     }
 
     const token = 'mock-token-12345'
@@ -34,6 +35,8 @@ export async function POST(request) {
     // Set cookies so middleware can detect authentication and role server-side
     res.cookies.set('x-bst-token', token, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 })
     res.cookies.set('x-bst-user-role', user.role, { httpOnly: true, path: '/', maxAge: 60 * 60 * 24 })
+    
+    // redirect(`/${user.role}/dashboard`) // Redirect to dashboard after login
 
     return res
   } catch (err) {

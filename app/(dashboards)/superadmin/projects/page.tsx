@@ -50,11 +50,11 @@ export default function SuperAdminProjectsPage() {
           <Input placeholder="Search projects..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           <Select value={selectedClub} onValueChange={(v) => setSelectedClub(v)}>
             <SelectTrigger><SelectValue placeholder="Filter by club"/></SelectTrigger>
-            <SelectContent><SelectItem value="">All Clubs</SelectItem></SelectContent>
+            <SelectContent><SelectItem value="active">All Clubs</SelectItem></SelectContent>
           </Select>
           <Select value={selectedStatus} onValueChange={(v) => setSelectedStatus(v)}>
             <SelectTrigger><SelectValue placeholder="Status"/></SelectTrigger>
-            <SelectContent><SelectItem value="">Any</SelectItem><SelectItem value="active">Active</SelectItem></SelectContent>
+            <SelectContent><SelectItem value="active">Any</SelectItem><SelectItem value="active">Active</SelectItem></SelectContent>
           </Select>
         </div>
 

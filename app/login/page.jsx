@@ -17,8 +17,11 @@ export default function Login() {
         const res = await fetch('/api/auth/me', { cache: 'no-store' })
         if (res.ok) {
           const user = await res.json()
-          if (user?.role) router.push(`/${user.role}/dashboard`)
+          if (user?.role) {
+            router.replace(`/${user.role}/dashboard`)
+          } 
         }
+
       } catch (e) {
         // ignore
       }

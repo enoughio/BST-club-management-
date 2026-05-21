@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Calendar, Clock, MapPin, Search, Star, Users } from "lucide-react"
 
 type Role = { role: string; assignedTo?: string | null }
+
 type Meeting = {
   id: string
   title: string
@@ -18,6 +19,7 @@ type Meeting = {
   description: string
   roles?: Role[]
 }
+
 type EventItem = {
   id: string
   title: string
@@ -35,6 +37,7 @@ type EventItem = {
   ticketPrice?: string
   categories?: string[]
 }
+
 type Data = { meetings: Meeting[]; events: EventItem[]; currentUserId: string }
 
 const getMeetingsAndEvents = async (): Promise<Data> => {

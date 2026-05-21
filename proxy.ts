@@ -6,8 +6,8 @@ export default function proxy (request : NextRequest ) {
 
     const { pathname } = request.nextUrl;
 
-    const token = request.cookies.get("x-bst-token")?.value || null; 
-    const userRole = request.cookies.get("x-bst-user-role")?.value || null;
+    const token = request.cookies.get("x-bst-token")?.value ; 
+    const userRole = request.cookies.get("x-bst-user-role")?.value ;
     
     console.log(`middleware called  ${userRole} ${token} ${pathname}`);
 

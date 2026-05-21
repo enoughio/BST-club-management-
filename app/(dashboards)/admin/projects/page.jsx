@@ -25,7 +25,7 @@ import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { CheckCircle, MoreHorizontal, Plus, User } from "lucide-react"
 import Link from "next/link"
 import { getMembers } from "@/lib/api"
@@ -38,7 +38,7 @@ export default function ProjectsPage() {
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false)
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false)
   const [feedback, setFeedback] = useState("")
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,17 +86,17 @@ export default function ProjectsPage() {
       setProjects(updatedProjects)
       setIsAssignDialogOpen(false)
 
-      toast({
-        title: "Project Assigned",
-        description: "The project has been successfully assigned.",
-      })
+      // toast({
+      //   title: "Project Assigned",
+      //   description: "The project has been successfully assigned.",
+      // })
     } catch (error) {
       console.error("Error assigning project:", error)
-      toast({
-        title: "Error",
-        description: "Failed to assign project. Please try again.",
-        variant: "destructive",
-      })
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to assign project. Please try again.",
+      //   variant: "destructive",
+      // })
     }
   }
 
@@ -122,17 +122,17 @@ export default function ProjectsPage() {
       setProjects(updatedProjects)
       setIsCompleteDialogOpen(false)
 
-      toast({
-        title: "Project Completed",
-        description: "The project has been marked as completed.",
-      })
+      // toast({
+      //   title: "Project Completed",
+      //   description: "The project has been marked as completed.",
+      // })
     } catch (error) {
       console.error("Error completing project:", error)
-      toast({
-        title: "Error",
-        description: "Failed to mark project as completed. Please try again.",
-        variant: "destructive",
-      })
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to mark project as completed. Please try again.",
+      //   variant: "destructive",
+      // })
     }
   }
 
