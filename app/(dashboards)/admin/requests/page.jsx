@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { Calendar, Clock, CalendarIcon, Flag, Loader2, Plus, Send, UserMinus } from "lucide-react"
 import { getMembers, getEvents } from "@/lib/api"
 
@@ -37,7 +37,7 @@ export default function RequestsPage() {
     reason: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,17 +111,17 @@ export default function RequestsPage() {
       })
       setIsCreateDialogOpen(false)
 
-      toast({
-        title: "Request Submitted",
-        description: "Your request has been submitted to the Super Admin.",
-      })
+      // toast({
+      //   title: "Request Submitted",
+      //   description: "Your request has been submitted to the Super Admin.",
+      // })
     } catch (error) {
       console.error("Error creating request:", error)
-      toast({
-        title: "Error",
-        description: "Failed to submit request. Please try again.",
-        variant: "destructive",
-      })
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to submit request. Please try again.",
+      //   variant: "destructive",
+      // })
     } finally {
       setIsSubmitting(false)
     }

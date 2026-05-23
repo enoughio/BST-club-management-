@@ -41,7 +41,7 @@ type EventItem = {
 type Data = { meetings: Meeting[]; events: EventItem[]; currentUserId: string }
 
 const getMeetingsAndEvents = async (): Promise<Data> => {
-  return new Promise((resolve) => {
+    return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
         meetings: [

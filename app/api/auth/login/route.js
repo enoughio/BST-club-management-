@@ -22,10 +22,10 @@ export async function POST(request) {
         clubId: "1",
         clubName: "Bhopal Storytellers",
         occupation: "Software Engineer",
-        membershipExpiryDate: "2023-05-15",
+        membershipExpiryDate: "2023-05-15", 
         joinDate: "2022-05-15",
         bio: "Passionate about public speaking and leadership development. I joined Storytellers to improve my communication skills and connect with like-minded individuals.",
-        role: "admin",
+        role: "superadmin" // Change to "admin" or "member" to test different roles,
     }
 
     const token = 'mock-token-12345'
