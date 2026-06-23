@@ -8,6 +8,30 @@ import { Button } from "@/components/ui/button"
 import { getClubs, getRequests, getEvents } from "@/lib/api"
 import { AlertTriangle, Building, Calendar, Flag, Star, Users } from "lucide-react"
 import Link from "next/link"
+type Club = {
+  id: string
+  name?: string
+  city?: string
+  Admin?: string
+  members?: number
+}
+
+type RequestItem = {
+  id: string
+  type: string
+  club?: string
+  requestedDate: string
+  status: string
+}
+
+type EventItem = {
+  id: string
+  title?: string
+  highlighted?: boolean
+  formattedDate?: string
+  location?: string
+  club?: string
+}
 
 export default function SuperAdminDashboard() {
   const [stats, setStats] = useState({
@@ -18,15 +42,14 @@ export default function SuperAdminDashboard() {
     highlightedEvents: 0,
   })
 
-  const [clubs, setClubs] = useState([])
-  const [requests, setRequests] = useState([])
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [clubs, setClubs] = useState<Club[]>([])
+  const [requests, setRequests] = useState<RequestItem[]>([])
+  const [events, setEvents] = useState<EventItem[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch data for dashboard
         const clubsData = await getClubs()
         const requestsData = await getRequests()
         const eventsData = await getEvents()
@@ -35,18 +58,11 @@ export default function SuperAdminDashboard() {
         setRequests(requestsData)
         setEvents(eventsData)
 
-        // Calculate stats
-        const pendingRequests = requestsData.filter((request) => {
-          return request.status === "Pending"
-        })
+        const pendingRequests = requestsData.filter((request: RequestItem) => request.status === "Pending")
+        const highlightedEvents = eventsData.filter((event: EventItem) => event.highlighted)
 
-        const highlightedEvents = eventsData.filter((event) => {
-          return event.highlighted
-        })
-
-        // Calculate total members across all clubs
-        const totalMembers = clubsData.reduce((acc, club) => {
-          return acc + club.members
+        const totalMembers = clubsData.reduce((acc: number, club: Club) => {
+          return acc + (club.members || 0)
         }, 0)
 
         setStats({
@@ -145,7 +161,7 @@ export default function SuperAdminDashboard() {
             </div>
 
             {stats.pendingRequests > 0 && (
-              <Alert variant="warning">
+              <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Action Required</AlertTitle>
                 <AlertDescription>

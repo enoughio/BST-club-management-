@@ -1,20 +1,24 @@
 import React from "react";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { logout } from "../actions";
 
-export const metadata = {
+export const metadata: { title: string; description: string } = {
   title: "Dashboards",
   description: "Common dashboard layout",
 };
 
-export default async function DashboardLayout({ children }) {
+type NavItem = { label: string; href: string; icon: string }
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const cookieStore = await cookies();
   const role = cookieStore.get("x-bst-user-role")?.value;
-
-  const navByRole = {
+  const navByRole: Record<string, NavItem[]> = {
     admin: [
       { label: "Overview", href: "/admin/dashboard", icon: "📊" },
       { label: "Club Details", href: "/admin/club-details", icon: "🏢" },
@@ -49,7 +53,7 @@ export default async function DashboardLayout({ children }) {
   //   redirect('/login')
   // }
 
-  const navItems = navByRole[role] ?? [];
+  const navItems : Array<NavItem> =  [];
   let roleTitle = "User";
   if (role === "admin") roleTitle = "Club Admin";
   else if (role === "member") roleTitle = "Member";
@@ -86,7 +90,7 @@ export default async function DashboardLayout({ children }) {
           {/* Navigation */}
           <nav className="mb-6">
             <ul className="space-y-1">
-              {navItems.map((item) => (
+              {navItems && navItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -105,7 +109,9 @@ export default async function DashboardLayout({ children }) {
           {/* Logout Button */}
           <div className="mt-auto pt-4 border-t border-white/10">
             <div className="">
-              <form action={logout}>
+              <form action={
+                  () => logout()
+                }>
                 <button
                   type="submit"
                   className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50/10 text-red-500 border border-red-500/30 rounded font-medium hover:bg-red-50/20"

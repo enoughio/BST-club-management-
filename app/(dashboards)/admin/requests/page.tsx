@@ -14,21 +14,66 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"  
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-// import { useToast } from "@/hooks/use-toast"
 import { Calendar, Clock, CalendarIcon, Flag, Loader2, Plus, Send, UserMinus } from "lucide-react"
 import { getMembers, getEvents } from "@/lib/api"
 
+type Member = {
+  id: string
+  first_name?: string
+  last_name?: string
+}
+
+type Event = {
+  id: string
+  title?: string
+}
+
+type RequestDetails = {
+  memberId?: string
+  eventId?: string
+  startDate?: string
+  endDate?: string
+  reason?: string
+}
+
+type RequestItem = {
+  id: string
+  type: string
+  requestedBy?: string
+  requestedDate: string
+  status: string
+  club?: string
+  details: RequestDetails
+}
+
+type NewRequestState = {
+  type: string
+  memberId: string
+  eventId: string
+  startDate: string
+  endDate: string
+  reason: string
+}
+
+type RequestDetailsView = {
+  title: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+  content: string
+  date: string
+}
+
 export default function RequestsPage() {
-  const [requests, setRequests] = useState([])
-  const [members, setMembers] = useState([])
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [newRequest, setNewRequest] = useState({
+  const [requests, setRequests] = useState<RequestItem[]>([])
+  const [members, setMembers] = useState<Member[]>([])
+  const [events, setEvents] = useState<Event[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false)
+  const [newRequest, setNewRequest] = useState<NewRequestState>({
     type: "",
     memberId: "",
     eventId: "",
@@ -36,8 +81,7 @@ export default function RequestsPage() {
     endDate: "",
     reason: "",
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  // const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,16 +107,15 @@ export default function RequestsPage() {
     setIsSubmitting(true)
 
     try {
-      const requestData = {
+      const requestData: Partial<RequestItem> = {
         type: newRequest.type,
-        requestedBy: "1", // Current admin ID
+        requestedBy: "1",
         requestedDate: new Date().toISOString(),
         status: "Pending",
-        club: "1", // Current club ID
+        club: "1",
         details: {},
       }
 
-      // Add type-specific details
       switch (newRequest.type) {
         case "MemberRemoval":
           requestData.details = {
@@ -97,10 +140,8 @@ export default function RequestsPage() {
 
       const result = await createRequest(requestData)
 
-      // Update local state
-      setRequests([result, ...requests])
+      setRequests((prev) => [result, ...prev])
 
-      // Reset form & close dialog
       setNewRequest({
         type: "",
         memberId: "",
@@ -110,24 +151,14 @@ export default function RequestsPage() {
         reason: "",
       })
       setIsCreateDialogOpen(false)
-
-      // toast({
-      //   title: "Request Submitted",
-      //   description: "Your request has been submitted to the Super Admin.",
-      // })
     } catch (error) {
       console.error("Error creating request:", error)
-      // toast({
-      //   title: "Error",
-      //   description: "Failed to submit request. Please try again.",
-      //   variant: "destructive",
-      // })
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const getRequestDetails = (request) => {
+  const getRequestDetails = (request: RequestItem): RequestDetailsView => {
     switch (request.type) {
       case "MemberRemoval": {
         const member = members.find((m) => m.id === request.details.memberId)
@@ -137,7 +168,7 @@ export default function RequestsPage() {
           description: member
             ? `Request to remove ${member.first_name} ${member.last_name} from the club.`
             : "Request to remove a member from the club.",
-          content: request.details.reason,
+          content: request.details.reason || "",
           date: new Date(request.requestedDate).toLocaleDateString(),
         }
       }
@@ -145,8 +176,10 @@ export default function RequestsPage() {
         return {
           title: "Club Freeze Request",
           icon: Clock,
-          description: `Request to freeze club activities from ${new Date(request.details.startDate).toLocaleDateString()} to ${new Date(request.details.endDate).toLocaleDateString()}.`,
-          content: request.details.reason,
+          description: `Request to freeze club activities from ${new Date(
+            request.details.startDate || ""
+          ).toLocaleDateString()} to ${new Date(request.details.endDate || "").toLocaleDateString()}.`,
+          content: request.details.reason || "",
           date: new Date(request.requestedDate).toLocaleDateString(),
         }
       }
@@ -156,7 +189,7 @@ export default function RequestsPage() {
           title: "Event Cancellation Request",
           icon: Calendar,
           description: event ? `Request to cancel the event "${event.title}".` : "Request to cancel an event.",
-          content: request.details.reason,
+          content: request.details.reason || "",
           date: new Date(request.requestedDate).toLocaleDateString(),
         }
       }
@@ -171,14 +204,14 @@ export default function RequestsPage() {
     }
   }
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "Approved":
-        return <Badge variant="success">Approved</Badge>
+        return <Badge variant="default">Approved</Badge>
       case "Rejected":
         return <Badge variant="destructive">Rejected</Badge>
       case "Pending":
-        return <Badge variant="warning">Pending</Badge>
+        return <Badge variant="secondary">Pending</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -504,4 +537,3 @@ export default function RequestsPage() {
     </>
   )
 }
-

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
-export async function logout(request: NextRequest) {
+export async function logout() {
     
     console.log("action logout called ")
 
