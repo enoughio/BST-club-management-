@@ -3,22 +3,49 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { logout } from "../actions";
+import { redirect } from "next/navigation";
 
-export const metadata: { title: string; description: string } = {
+export const metadata = {
   title: "Dashboards",
   description: "Common dashboard layout",
 };
 
-type NavItem = { label: string; href: string; icon: string }
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+type NavItem = {
+  label: string;
+  href: string;
+  icon: string;
+};
+
+
+type NavByRoles = { 
+  admin: NavItem[];
+  member: NavItem[];
+  superadmin: NavItem[];
+}
+
+// type NavByRoles = Record<NavRoles, NavItem[]>;
+
+
+// type guard 
+type NavRoles = "admin" | "member" | "superadmin";
+
+
+// takes string and returns a boolean value indicating whether the string is a valid NavRoles value
+// guard function
+function isNavRoles(role :  string) : role is NavRoles { 
+  return ["admin", "superadmin", "member"].includes(role)
+} 
+
+
+export default async function DashboardLayout({ children } : { children: React.ReactNode }) {
   const cookieStore = await cookies();
-  const role = cookieStore.get("x-bst-user-role")?.value;
-  const navByRole: Record<string, NavItem[]> = {
+  const cookieRole  = cookieStore.get("x-bst-user-role")?.value || null; // default to member if not set
+  
+  const role =  
+    cookieRole && isNavRoles(cookieRole) ? cookieRole : ""
+
+  const navByRole : NavByRoles  = {
     admin: [
       { label: "Overview", href: "/admin/dashboard", icon: "📊" },
       { label: "Club Details", href: "/admin/club-details", icon: "🏢" },
@@ -49,11 +76,13 @@ export default async function DashboardLayout({
   };
 
   // if role is not set, redirect to login
-  // if (!role) {
-  //   redirect('/login')
-  // }
+  if (!role) {
+    redirect('/login')
+  }
 
-  const navItems : Array<NavItem> =  [];
+  
+  const navItems = navByRole[role] ?? [];
+  
   let roleTitle = "User";
   if (role === "admin") roleTitle = "Club Admin";
   else if (role === "member") roleTitle = "Member";
@@ -90,7 +119,7 @@ export default async function DashboardLayout({
           {/* Navigation */}
           <nav className="mb-6">
             <ul className="space-y-1">
-              {navItems && navItems.map((item) => (
+              {navItems.map((item ) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
@@ -109,9 +138,7 @@ export default async function DashboardLayout({
           {/* Logout Button */}
           <div className="mt-auto pt-4 border-t border-white/10">
             <div className="">
-              <form action={
-                  () => logout()
-                }>
+              <form action={logout}>
                 <button
                   type="submit"
                   className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50/10 text-red-500 border border-red-500/30 rounded font-medium hover:bg-red-50/20"

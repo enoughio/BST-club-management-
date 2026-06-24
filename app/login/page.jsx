@@ -14,6 +14,7 @@ export default function Login() {
     // no client-side auth provider; rely on server-side cookies and /api/auth/me if already logged in
     const check = async () => {
       try {
+
         const res = await fetch('/api/auth/me', { cache: 'no-store' })
         if (res.ok) {
           const user = await res.json()
@@ -54,10 +55,15 @@ export default function Login() {
         setLoading(false)
         return
       }
-
+      console.log("redirecting to") 
+      
       const data = await res.json()
-      const role = data.user?.role || 'member'
+      // router.replace(`/${user.role}/dashboard`)
+      const role = data.user.role
+      console.log("about to navigate");
       router.push(`/${role}/dashboard`)
+      return
+      
     } catch (err) {
       setError('Login failed')
     } finally {

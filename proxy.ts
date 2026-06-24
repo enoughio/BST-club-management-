@@ -9,7 +9,7 @@ export default function proxy (request : NextRequest ) {
     const token = request.cookies.get("x-bst-token")?.value ; 
     const userRole = request.cookies.get("x-bst-user-role")?.value ;
     
-    console.log(`middleware called  ${userRole} ${token} ${pathname}`);
+    // console.log(`middleware called  ${userRole} ${token} ${pathname}`);
 
     // log for runtime verification
     // try {
